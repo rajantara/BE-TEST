@@ -1,11 +1,34 @@
+const express = require('express');
+const router = express.Router();
 
-var express = require('express');
-var router = express.Router();
+const Artikel = require('../models/articles');
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+router.get('/', async(req, res, next) => {
+  try {
+    const data = await Artikel.find()
+    res.render('index', { data });
+
+  } catch (err) {
+    res.status(500).send(err.stack);
+  }
 });
 
-// module.exports = router;
+router.post('/add', async (req, res) => {
+  try {
+    const artikel = new Artikel({
+      namaArtikel: req.body.namaArtikel,
+      sumberArtikel: req.body.sumberArtikel,
+    });
+    await artikel.save();
+    res.redirect('/index')
+  } catch (err) {
+    console.error(err.massage)
+  }
+});
+
+
+
+
+module.exports = router;
 

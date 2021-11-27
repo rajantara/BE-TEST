@@ -1,36 +1,32 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-const mongoose = require('mongoose');
-const cors = require('cors')
-const router = express.Router();
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const methodOverride = require('method-override');
+const connectDB = require('./config/db');
 
-mongoose.connect('mongodb://localhost/latihId', {
-  useNewUrlParser: true, useUnifiedTopology: true
-});
+var indexRouter = require('./routes/index');
 
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-  console.log('koneksi berhasil');
-});
+const app = express();
 
-var indexRouter = require('./routes/users');
-var IdRouter = require('./routes/index');
+//connection database
+connectDB();
 
-var app = express();
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+app.use(methodOverride('_method'));
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cors())
 
 app.use('/', indexRouter);
-app.use('/api/index', IdRouter);
 
+app.listen(3000, () => {
+  console.log("aplikasi ini berjalan di https://localhost:3000")
+});
 
-module.exports = router ;
+module.exports = app;
