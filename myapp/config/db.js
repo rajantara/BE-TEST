@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const connectDB = async () => {
   try {
     await mongoose.connect(
-      'mongodb+srv://admin:5Y3lm8HOntUBqX7K@cluster0.weqqq.mongodb.net/ArticlesdbretryWrites=true&w=majority',
+      'mongodb+srv://admin:ZYVX6D4SZFepsAM3@cluster0.weqqq.mongodb.net/AppdbretryWrites=true&w=majority',
       {
         useUnifiedTopology: true,
         useNewUrlParser: true,
@@ -11,8 +11,7 @@ const connectDB = async () => {
     );
     console.log('MongoDB connected...');
   } catch (err) {
-    console.error(err.message);
-    process.exit(1);
+    console.error('database not connect'+err);
   }
 };
 
